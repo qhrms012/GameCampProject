@@ -2,44 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPoolManager : MonoBehaviour
+public enum PoolKey
 {
-    public GameObject[] preFabs;
+    PlayerBullet,
+    //EnemyBullet,
+    Enemy
+}
 
+public class ObjectPoolManager : Singleton<ObjectPoolManager>
+{
+    [System.Serializable]
+    public class Pool
+    {
+        public PoolKey key;
+        public GameObject prefab;
+    }
 
-    List<GameObject>[] pools;
+    public Pool[] poolsConfig;
+
+    private Dictionary<PoolKey, List<GameObject>> poolsDict;
 
     private void Awake()
     {
-        pools = new List<GameObject>[preFabs.Length];
+        poolsDict = new Dictionary<PoolKey, List<GameObject>>();
 
-        for (int index = 0; index < pools.Length; index++)
+        foreach (var config in poolsConfig)
         {
-            pools[index] = new List<GameObject>();
+            poolsDict[config.key] = new List<GameObject>();
         }
     }
 
-    public GameObject Get(int index)
+    public GameObject Get(PoolKey key)
     {
+        var list = poolsDict[key];
         GameObject select = null;
 
-        foreach (GameObject item in pools[index])
+        foreach (GameObject item in list)
         {
             if (!item.activeSelf)
             {
                 select = item;
                 select.SetActive(true);
-                break;
+                return select;
             }
         }
 
-        if (!select)
-        {
-            select = Instantiate(preFabs[index], transform);
-            pools[index].Add(select);
-        }
+        var prefab = System.Array.Find(poolsConfig, p => p.key == key).prefab;
+        select = Instantiate(prefab, transform);
+        list.Add(select);
 
         return select;
     }
-
 }
