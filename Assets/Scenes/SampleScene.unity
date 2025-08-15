@@ -698,7 +698,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3438497936822649407, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3438497936822649407, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4042198291917147054, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -706,7 +710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4042198291917147054, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.44
       objectReference: {fileID: 0}
     - target: {fileID: 4042198291917147054, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -739,6 +743,14 @@ PrefabInstance:
     - target: {fileID: 4042198291917147054, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4086699312191236252, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8959374176049420167, guid: 972d77e26847bce4faa4661d4333791d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

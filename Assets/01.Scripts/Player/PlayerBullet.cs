@@ -5,11 +5,29 @@ using UnityEngine;
 public class PlayerBullet : MonoBehaviour
 {
     public int damage;
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private BoxCollider2D bc;
+    private Rigidbody2D rb;
+    
+    private void Awake()
     {
-        if(collision.gameObject.tag == "Wall")
-            gameObject.SetActive(false);
+        bc = GetComponent<BoxCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
+
+            DisableBullet();
+        }
+    }
+    private void DisableBullet()
+    {
+        gameObject.SetActive(false);
     }
 }
