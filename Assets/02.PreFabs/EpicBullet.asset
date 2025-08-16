@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolKey: 0
   grade: 2
+  type: 6
   baseDamage: 10
   baseDelay: 1
   damageIncrement: 2
   delayDecrement: 0.1
   speed: 10
+  bulletSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}

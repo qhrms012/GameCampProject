@@ -17,9 +17,10 @@ public class Player : MonoBehaviour
     private float damageInterval = 1f; // 1초마다 데미지 합산
 
 
-    private float fireDelay;
+
     public bool isDie;
 
+    private Dictionary<BulletType, BulletState> unlockedBullets = new Dictionary<BulletType, BulletState>();
     private void Awake()
     {
         bx = GetComponent<BoxCollider2D>();
@@ -37,21 +38,46 @@ public class Player : MonoBehaviour
             damageDelay = 0;
         }
 
-        fireDelay += Time.deltaTime;
-        if (fireDelay >= 1f && isDie == false)
-        { 
-            StartCoroutine(Shot()); 
-            fireDelay = 0; 
+        float dt = Time.deltaTime;
+
+        foreach (var bulletEntry in unlockedBullets)
+        {
+            BulletState state = bulletEntry.Value;
+
+            if (state.CanFire(dt))
+            {
+                Fire(state);
+            }
         }
     }
-    IEnumerator Shot()
+    void Fire(BulletState state)
     {
-        GameObject bullet = ObjectPoolManager.Instance.Get(PoolKey.PlayerBullet);
-        Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
-        Transform spawnBulletPos = PlayerPosition;
-        bullet.transform.position = spawnBulletPos.position;
-        bulletRigid.velocity = Vector2.down * 10f; 
-        yield return null;
+        GameObject bullet = ObjectPoolManager.Instance.Get(state.data.poolKey);
+        bullet.transform.position = transform.position;
+
+        // 스프라이트 교체
+        SpriteRenderer sr = bullet.GetComponent<SpriteRenderer>();
+        sr.sprite = state.data.bulletSprite;
+
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.down * state.data.speed;
+
+        PlayerBullet bulletScript = bullet.GetComponent<PlayerBullet>();
+        bulletScript.damage = state.currentDamage;
+    }
+    public void UnlockBullet(BulletData newBullet)
+    {
+        if (unlockedBullets.TryGetValue(newBullet.type, out BulletState state))
+        {
+            state.Upgrade(); // 중복이면 강화
+            Debug.Log($"{newBullet.grade}-{newBullet.type} 총알 Lv.{state.level}, 데미지 {state.currentDamage}, 딜레이 {state.currentDelay}");
+        }
+        else
+        {
+            BulletState newState = new BulletState(newBullet);
+            unlockedBullets.Add(newBullet.type, newState);
+            Debug.Log($"{newBullet.grade}-{newBullet.type} 총알 해금됨!");
+        }
     }
     private void ApplyTotalDamage()
     {

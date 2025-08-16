@@ -7,6 +7,8 @@ public class GameManager : Singleton<GameManager>
     public Transform enemySp;       // 몬스터 스폰 위치
     public float spawnInterval = 1f; // 몬스터 스폰 주기(초)
     public bool isStart;
+    public Player player;
+    public BulletManager bulletManager;
 
     private float enemySpawnTimer;
 
@@ -41,5 +43,13 @@ public class GameManager : Singleton<GameManager>
         rb.velocity = enemySp.up * enemy.speed;
 
         yield return null;
+    }
+
+    public void RollBullet()
+    {
+        BulletData newBullet = bulletManager.GetRandomBullet();
+        
+        player.UnlockBullet(newBullet);
+        
     }
 }
