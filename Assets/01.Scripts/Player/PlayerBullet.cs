@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
-    public int damage;
+    public float damage;
     private BoxCollider2D bc;
     private Rigidbody2D rb;
     

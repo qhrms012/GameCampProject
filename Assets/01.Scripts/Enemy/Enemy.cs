@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public float curHp;
     public float maxHp = 100;
     public float speed = 1f;
+    public float damage;
 
     private Rigidbody2D rb;
     private BoxCollider2D bc;
@@ -46,6 +47,8 @@ public class Enemy : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            Player player = collision.GetComponent<Player>();
+            player.TakeDamage(damage);
             rb.velocity = Vector2.zero;
             Debug.Log($"{gameObject.name} → 플레이어 충돌, 이동 정지");
         }
