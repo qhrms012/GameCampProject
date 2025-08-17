@@ -15,7 +15,7 @@ MonoBehaviour:
   poolKey: 0
   grade: 2
   type: 6
-  baseDamage: 10
+  baseDamage: 50
   baseDelay: 1
   damageIncrement: 2
   delayDecrement: 0.1
