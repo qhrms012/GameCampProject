@@ -2,59 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+[System.Serializable]
+public class RoundInfo
+{
+    public List<EnemyData> enemies; // 이 라운드에서 나올 몬스터들
+}
+
 public class GameManager : Singleton<GameManager>
 {
-    public Transform enemySp;       // 몬스터 스폰 위치
-    public float spawnInterval = 1f; // 몬스터 스폰 주기(초)
+    [Header("Spawn Settings")]
+    public Transform enemySp;
+    public float spawnInterval = 1f;   // 몬스터 스폰 주기
+    public float roundDuration = 10f;  // 라운드 유지 시간
+    public float roundDelay = 1.5f;    // 라운드 종료 후 대기 시간
+
+    [Header("Game State")]
     public bool isStart;
+    public int coin;
+    public int roundCount;
+
+    [Header("References")]
     public Player player;
     public BulletManager bulletManager;
+    public List<RoundInfo> rounds;
 
-    private float enemySpawnTimer;
-    public int coin;
-
-    // 코인 변경 이벤트
     public static event System.Action<int> OnCoinChanged;
+    public static event System.Action<int> OnRoundChanged;
 
-    void Update()
+    void Start()
     {
-        if (!isStart) return;
+        AddCoin(100);
+        if (isStart)
+            StartCoroutine(RoundRoutine());
+    }
 
-        enemySpawnTimer += Time.deltaTime;
-
-        if (enemySpawnTimer >= spawnInterval)
+    IEnumerator RoundRoutine()
+    {
+        while (isStart)
         {
-            StartCoroutine(MonsterSpawn());
-            enemySpawnTimer = 0f;
+            // 라운드 시작
+            roundCount++;
+            OnRoundChanged?.Invoke(roundCount);
+            Debug.Log($"라운드 {roundCount} 시작!");
+
+            float elapsed = 0f;
+
+            // 라운드 시간 동안 계속 스폰
+            while (elapsed < roundDuration)
+            {
+                yield return StartCoroutine(MonsterSpawn());
+                yield return new WaitForSeconds(spawnInterval);
+                elapsed += spawnInterval;
+            }
+
+            Debug.Log($"라운드 {roundCount} 종료! {roundDelay}초 대기...");
+            yield return new WaitForSeconds(roundDelay);
         }
     }
 
     IEnumerator MonsterSpawn()
     {
-        // 풀에서 몬스터 가져오기
         GameObject monster = ObjectPoolManager.Instance.Get(PoolKey.Enemy);
-
-        // 몬스터 컴포넌트 참조
         Enemy enemy = monster.GetComponent<Enemy>();
-        Rigidbody2D rb = monster.GetComponent<Rigidbody2D>();
 
-        // 위치 초기화
-        monster.transform.position = enemySp.position;
-        // HP 초기화
-        enemy.curHp = enemy.maxHp;
-
-        // 속도 부여 (Enemy 스크립트의 speed 사용)
-        rb.velocity = enemySp.up * enemy.speed;
+        EnemyData enemyData = GetEnemyDataByRound();
+        enemy.Init(enemyData, enemySp.position, enemySp.up);
 
         yield return null;
+    }
+
+    EnemyData GetEnemyDataByRound()
+    {
+        int idx = Mathf.Min(roundCount - 1, rounds.Count - 1);
+        List<EnemyData> availableEnemies = rounds[idx].enemies;
+
+        int rand = Random.Range(0, availableEnemies.Count);
+        return availableEnemies[rand];
     }
 
     public void RollBullet()
     {
         BulletData newBullet = bulletManager.GetRandomBullet();
-        
         player.UnlockBullet(newBullet);
-        
     }
 
     void OnEnable()
@@ -70,7 +101,8 @@ public class GameManager : Singleton<GameManager>
     public void AddCoin(int amount)
     {
         coin += amount;
-        OnCoinChanged?.Invoke(coin); // 변경된 코인 값을 알림
+        OnCoinChanged?.Invoke(coin);
         Debug.Log("현재 코인: " + coin);
     }
 }
+

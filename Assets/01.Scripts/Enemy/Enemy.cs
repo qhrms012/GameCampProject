@@ -15,9 +15,12 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
     private BoxCollider2D bc;
     private PlayerBullet pb;
+    private SpriteRenderer spriteRenderer;
 
     // 이벤트 선언 (죽었을 때)
     public static event System.Action<int> OnEnemyDied;
+
+    public EnemyData data;
 
     private void Awake()
     {
@@ -25,10 +28,21 @@ public class Enemy : MonoBehaviour
         bc = GetComponent<BoxCollider2D>();
         pb = GetComponent<PlayerBullet>();
         curHp = maxHp;
-        
-        
-    }
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
+    }
+    public void Init(EnemyData enemyData, Vector2 spawnPos, Vector2 dir)
+    {
+        data = enemyData;
+        curHp = data.maxHp;
+
+        transform.position = spawnPos;
+
+        if (spriteRenderer != null && data.enemySprite != null)
+            spriteRenderer.sprite = data.enemySprite;
+
+        rb.velocity = dir * data.speed;
+    }
     public void TakeDamage(float amount)
     {
         curHp -= amount;

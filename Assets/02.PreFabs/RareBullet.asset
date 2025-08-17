@@ -20,4 +20,4 @@ MonoBehaviour:
   damageIncrement: 2
   delayDecrement: 0.1
   speed: 10
-  bulletSprite: {fileID: 21300000, guid: 6198affec8764b7408cf7d80fb9cd0fb, type: 3}
+  bulletSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
