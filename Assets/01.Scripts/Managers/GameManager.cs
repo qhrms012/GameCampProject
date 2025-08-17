@@ -11,6 +11,10 @@ public class GameManager : Singleton<GameManager>
     public BulletManager bulletManager;
 
     private float enemySpawnTimer;
+    public int coin;
+
+    // 코인 변경 이벤트
+    public static event System.Action<int> OnCoinChanged;
 
     void Update()
     {
@@ -51,5 +55,22 @@ public class GameManager : Singleton<GameManager>
         
         player.UnlockBullet(newBullet);
         
+    }
+
+    void OnEnable()
+    {
+        Enemy.OnEnemyDied += AddCoin;
+    }
+
+    void OnDisable()
+    {
+        Enemy.OnEnemyDied -= AddCoin;
+    }
+
+    public void AddCoin(int amount)
+    {
+        coin += amount;
+        OnCoinChanged?.Invoke(coin); // 변경된 코인 값을 알림
+        Debug.Log("현재 코인: " + coin);
     }
 }

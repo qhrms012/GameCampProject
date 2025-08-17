@@ -6,15 +6,18 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float curHp;
-    public float maxHp = 100;
+    public float maxHp = 200;
     public float speed = 1f;
     public float damage;
+
+    public int coinReward = 1;
 
     private Rigidbody2D rb;
     private BoxCollider2D bc;
     private PlayerBullet pb;
 
-
+    // 이벤트 선언 (죽었을 때)
+    public static event System.Action<int> OnEnemyDied;
 
     private void Awake()
     {
@@ -39,6 +42,9 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        // 이벤트
+        OnEnemyDied?.Invoke(coinReward);
+
         // 죽었을 때 처리 (오브젝트 비활성화)
         gameObject.SetActive(false);
     }

@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    public TextMeshProUGUI coinText;
+
+
+    void OnEnable()
     {
-        
+        GameManager.OnCoinChanged += UpdateCoinUI;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        
+        GameManager.OnCoinChanged -= UpdateCoinUI;
+    }
+
+    void UpdateCoinUI(int coin)
+    {
+        coinText.text = "Coin: " + coin.ToString();
     }
 }
