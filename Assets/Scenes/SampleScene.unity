@@ -1163,7 +1163,6 @@ MonoBehaviour:
   coinBtn: {fileID: 1269579803}
   coinBtnText: {fileID: 295267189}
   basePrice: 20
-  price: 20
   increment: 2
   bulletButtons:
   - type: 0
@@ -2442,9 +2441,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 10238650}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: RollBullet
+      - m_Target: {fileID: 719181931}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnRollButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

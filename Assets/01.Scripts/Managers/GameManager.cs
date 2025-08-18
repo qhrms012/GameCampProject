@@ -91,7 +91,6 @@ public class GameManager : Singleton<GameManager>
     public void RollBullet()
     {
         BulletData newBullet = bulletManager.GetRandomBullet();
-        TrySpendCoin(20);
         player.UnlockBullet(newBullet);
     }
 
