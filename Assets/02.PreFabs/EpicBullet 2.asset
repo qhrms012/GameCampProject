@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9444a75f993f7944b5fbf48fd640716, type: 3}
-  m_Name: NormalBullet
+  m_Name: EpicBullet 2
   m_EditorClassIdentifier: 
-  grade: 0
-  type: 0
+  grade: 2
+  type: 6
   poolKey: 0
-  bulletSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  baseDamage: 5
+  bulletSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  baseDamage: 50
   baseDelay: 1
   speed: 10
   damageIncrement: 2
   delayDecrement: 0.1
-  nextGradeBullet: {fileID: 11400000, guid: 38c5ebcfb70b8ce48a0120f6aaf72f60, type: 2}
+  nextGradeBullet: {fileID: 11400000, guid: 640645654a3ab3841a64368294c58c20, type: 2}

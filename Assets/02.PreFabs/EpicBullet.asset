@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9444a75f993f7944b5fbf48fd640716, type: 3}
   m_Name: EpicBullet
   m_EditorClassIdentifier: 
-  poolKey: 0
   grade: 2
   type: 6
+  poolKey: 0
+  bulletSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   baseDamage: 50
   baseDelay: 1
+  speed: 10
   damageIncrement: 2
   delayDecrement: 0.1
-  speed: 10
-  bulletSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  nextGradeBullet: {fileID: 11400000, guid: fa62f45eb45312a4b8f45c83bc6f9be7, type: 2}

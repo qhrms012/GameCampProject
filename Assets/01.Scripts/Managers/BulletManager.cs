@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletManager : MonoBehaviour
+public class BulletManager : Singleton<BulletManager>
 {
     public List<BulletData> allBullets; // 모든 총알 등록
     public List<GradeProbability> gradeProbabilities; // 등급별 확률
@@ -13,6 +13,10 @@ public class BulletManager : MonoBehaviour
     {
         public BulletGrade grade;
         public float probability; // %
+    }
+    public BulletData GetNextGradeBullet(BulletData current)
+    {
+        return current != null ? current.nextGradeBullet : null;
     }
     public BulletData GetRandomBullet()
     {

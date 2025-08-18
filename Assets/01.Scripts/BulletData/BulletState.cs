@@ -12,10 +12,24 @@ public class BulletState
 
     public BulletState(BulletData data)
     {
-        this.data = data;
-        currentDamage = data.baseDamage;
-        currentDelay = data.baseDelay;
+        SetData(data);
+        level = 1; // 처음 해금은 Lv.1
     }
+
+    // 등급(데이터) 교체 시 스탯을 해당 등급의 베이스로 리셋
+    public void SetData(BulletData newData)
+    {
+        if (newData == null)
+        {
+            Debug.LogError("[BulletState] SetData called with null");
+            return;
+        }
+        data = newData;
+        currentDamage = data.baseDamage;
+        currentDelay = Mathf.Max(0.01f, data.baseDelay);
+        fireTimer = 0f; // ← 승급 후 즉시 발사 타이밍을 재정렬하고 싶다면 유지
+    }
+
 
     public void Upgrade()
     {

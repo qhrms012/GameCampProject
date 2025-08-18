@@ -30,6 +30,9 @@ public class GameManager : Singleton<GameManager>
 
     public static event System.Action<int> OnCoinChanged;
     public static event System.Action<int> OnRoundChanged;
+    public static event System.Action<float> OnRoundTimeChanged;
+
+
 
     void Start()
     {
@@ -52,8 +55,11 @@ public class GameManager : Singleton<GameManager>
             // 라운드 시간 동안 계속 스폰
             while (elapsed < roundDuration)
             {
+                OnRoundTimeChanged?.Invoke(roundDuration - elapsed);
+
                 yield return StartCoroutine(MonsterSpawn());
                 yield return new WaitForSeconds(spawnInterval);
+                
                 elapsed += spawnInterval;
             }
 
@@ -85,6 +91,7 @@ public class GameManager : Singleton<GameManager>
     public void RollBullet()
     {
         BulletData newBullet = bulletManager.GetRandomBullet();
+        RemoveCoin(20);
         player.UnlockBullet(newBullet);
     }
 
@@ -103,6 +110,15 @@ public class GameManager : Singleton<GameManager>
         coin += amount;
         OnCoinChanged?.Invoke(coin);
         Debug.Log("현재 코인: " + coin);
+    }
+
+    public void RemoveCoin(int amount)
+    {
+        if (coin < amount)
+            return;
+        coin -= amount;
+        OnCoinChanged?.Invoke(coin);
+
     }
 }
 
