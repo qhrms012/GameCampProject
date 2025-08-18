@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: RareBullet
   m_EditorClassIdentifier: 
   grade: 1
-  type: 3
+  type: 2
   poolKey: 0
   bulletSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  baseDamage: 1
+  baseDamage: 30
   baseDelay: 1
   speed: 10
-  damageIncrement: 2
+  damageIncrement: 30
   delayDecrement: 0.1
   nextGradeBullet: {fileID: 11400000, guid: f98bf56a674d4d74696f504a037cca04, type: 2}

@@ -234,6 +234,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 38c5ebcfb70b8ce48a0120f6aaf72f60, type: 2}
   - {fileID: 11400000, guid: f98bf56a674d4d74696f504a037cca04, type: 2}
   - {fileID: 11400000, guid: fa62f45eb45312a4b8f45c83bc6f9be7, type: 2}
+  - {fileID: 11400000, guid: 7c9fe5a3198cac2489ae57e974a9ec41, type: 2}
+  - {fileID: 11400000, guid: 45187364d7f25124bbe16730ad032f12, type: 2}
+  - {fileID: 11400000, guid: cd00746ce1c8a5a4b9f0d5e52a49ba0a, type: 2}
+  - {fileID: 11400000, guid: 640645654a3ab3841a64368294c58c20, type: 2}
   gradeProbabilities:
   - grade: 0
     probability: 60
@@ -1156,39 +1160,36 @@ MonoBehaviour:
   coinText: {fileID: 1963532485}
   roundText: {fileID: 1734556467}
   roundTimerText: {fileID: 460692363}
+  coinBtn: {fileID: 1269579803}
+  coinBtnText: {fileID: 295267189}
+  basePrice: 20
+  price: 20
+  increment: 2
   bulletButtons:
   - type: 0
     promoteButton: {fileID: 1057212172}
     levelText: {fileID: 684001032}
-    gradeText: {fileID: 0}
   - type: 2
     promoteButton: {fileID: 763779562}
     levelText: {fileID: 874337147}
-    gradeText: {fileID: 0}
   - type: 4
     promoteButton: {fileID: 824742563}
     levelText: {fileID: 1224871975}
-    gradeText: {fileID: 0}
   - type: 6
     promoteButton: {fileID: 1977703868}
     levelText: {fileID: 1168810014}
-    gradeText: {fileID: 0}
-  - type: 6
-    promoteButton: {fileID: 1977703868}
-    levelText: {fileID: 1168810014}
-    gradeText: {fileID: 0}
-  - type: 6
-    promoteButton: {fileID: 1977703868}
-    levelText: {fileID: 1168810014}
-    gradeText: {fileID: 0}
-  - type: 6
-    promoteButton: {fileID: 1977703868}
-    levelText: {fileID: 1168810014}
-    gradeText: {fileID: 0}
-  - type: 6
-    promoteButton: {fileID: 1977703868}
-    levelText: {fileID: 1168810014}
-    gradeText: {fileID: 0}
+  - type: 1
+    promoteButton: {fileID: 452009174}
+    levelText: {fileID: 1588689555}
+  - type: 3
+    promoteButton: {fileID: 1737455543}
+    levelText: {fileID: 354192199}
+  - type: 5
+    promoteButton: {fileID: 1068463195}
+    levelText: {fileID: 1571031254}
+  - type: 7
+    promoteButton: {fileID: 1423406349}
+    levelText: {fileID: 2018372921}
 --- !u!1 &763779558
 GameObject:
   m_ObjectHideFlags: 0
@@ -2664,7 +2665,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curHp: 0
   maxHp: 100
-  PlayerPosition: {fileID: 1392453252}
   touchingEnemies: []
   isDie: 0
 --- !u!1 &1423406345

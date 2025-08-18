@@ -1,14 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class UIManager : Singleton<UIManager>
 {
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI roundTimerText;
+    public Button coinBtn;
+    public TextMeshProUGUI coinBtnText;
+    [SerializeField] private int basePrice = 20;
+    private int price;
+    [SerializeField] private int increment = 2;
 
     [System.Serializable]
     public class BulletButtonPair
@@ -55,6 +63,7 @@ public class UIManager : Singleton<UIManager>
     {
         Player.OnBulletLevelChanged += UpdateLevelUI;
         GameManager.OnCoinChanged += UpdateCoinUI;
+        GameManager.OnCoinChanged += UpdateCoinBtn;
         GameManager.OnRoundChanged += UpdateRoundCountUI;
         GameManager.OnRoundTimeChanged += UpdateRoundTimerUI;
 
@@ -65,9 +74,11 @@ public class UIManager : Singleton<UIManager>
     {
         Player.OnBulletLevelChanged -= UpdateLevelUI;
         GameManager.OnCoinChanged -= UpdateCoinUI;
+        GameManager.OnCoinChanged -= UpdateCoinBtn;
         GameManager.OnRoundChanged -= UpdateRoundCountUI;
         GameManager.OnRoundTimeChanged -= UpdateRoundTimerUI;
     }
+
 
     void Start()
     {
@@ -120,7 +131,30 @@ public class UIManager : Singleton<UIManager>
 
     // 나머지 UI
     void UpdateCoinUI(int coin) => coinText.text = $"Coin: {coin}";
-    void UpdateRoundCountUI(int round) => roundText.text = $"웨이브: {round}";
+    void UpdateCoinBtn(int coin)
+    {
+        coinBtn.interactable = coin >= price;
+    }
+
+    // 버튼 클릭
+    public void OnRollButtonClicked()
+    {
+        if (GameManager.Instance.TrySpendCoin(price))
+        {
+            GameManager.Instance.RollBullet();
+        }
+        else
+        {
+            // 부족할 때 피드백
+            Debug.Log("코인이 부족합니다.");
+        }
+    }
+    void UpdateRoundCountUI(int round)
+    {
+        roundText.text = $"웨이브: {round}";
+        price = basePrice + (round - 1) * increment;
+        coinBtnText.text = $"랜덤으로 소환: {price}";
+    }
     void UpdateRoundTimerUI(float t)
     {
         int m = Mathf.FloorToInt(t / 60f);

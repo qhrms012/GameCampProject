@@ -91,7 +91,7 @@ public class GameManager : Singleton<GameManager>
     public void RollBullet()
     {
         BulletData newBullet = bulletManager.GetRandomBullet();
-        RemoveCoin(20);
+        TrySpendCoin(20);
         player.UnlockBullet(newBullet);
     }
 
@@ -112,13 +112,12 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("현재 코인: " + coin);
     }
 
-    public void RemoveCoin(int amount)
+    public bool TrySpendCoin(int cost)
     {
-        if (coin < amount)
-            return;
-        coin -= amount;
+        if (coin < cost) return false;
+        coin -= cost;
         OnCoinChanged?.Invoke(coin);
-
+        return true;
     }
 }
 
