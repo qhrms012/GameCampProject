@@ -15,7 +15,7 @@ MonoBehaviour:
   grade: 1
   type: 3
   poolKey: 0
-  bulletSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  bulletSprite: {fileID: -1327499133, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}
   baseDamage: 30
   baseDelay: 1
   speed: 10

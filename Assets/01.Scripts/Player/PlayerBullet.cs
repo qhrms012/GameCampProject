@@ -25,6 +25,11 @@ public class PlayerBullet : MonoBehaviour
 
             DisableBullet();
         }
+
+        if (collision.CompareTag("Wall"))
+        {
+            gameObject.SetActive(false);
+        }
     }
     private void DisableBullet()
     {

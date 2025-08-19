@@ -72,5 +72,8 @@ public class Enemy : MonoBehaviour
             rb.velocity = Vector2.zero;
             Debug.Log($"{gameObject.name} → 플레이어 충돌, 이동 정지");
         }
+
+        if(collision.CompareTag("Wall"))
+            gameObject.SetActive(false);
     }
 }

@@ -16,4 +16,4 @@ MonoBehaviour:
   maxHp: 400
   speed: 4
   coinReward: 20
-  enemySprite: {fileID: 0}
+  enemySprite: {fileID: -2092964637, guid: 4104ee12b4d54f54b91b3ba875787837, type: 3}
