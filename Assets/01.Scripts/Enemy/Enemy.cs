@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
+using UnityEditor.AssetImporters;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -54,10 +55,14 @@ public class Enemy : MonoBehaviour
 
     public void Init(EnemyData enemyData, Vector2 spawnPos, Vector2 dir)
     {
+        rb.simulated = true;
+        bc.enabled = true;
+        
         data = enemyData;
         curHp = data.maxHp;
 
         transform.position = spawnPos;
+
 
         if (spriteRenderer != null && data.enemySprite != null)
             spriteRenderer.sprite = data.enemySprite;
@@ -68,12 +73,12 @@ public class Enemy : MonoBehaviour
     }
     public void TakeDamage(float amount)
     {
-        curHp -= amount;
-        Debug.Log($"{gameObject.name} 피격! 남은 HP: {curHp}");
+        curHp -= amount;           
 
         if (curHp <= 0)
         {
             Die();
+            curHp = 0;
         }
     }
 
@@ -82,6 +87,11 @@ public class Enemy : MonoBehaviour
         // 이벤트
         OnEnemyDied?.Invoke(coinReward);
 
+        bc.enabled = false;
+        rb.simulated = false;
+
+        animator.Play("Die");
+        
         // 죽었을 때 처리 (오브젝트 비활성화)
         gameObject.SetActive(false);
     }

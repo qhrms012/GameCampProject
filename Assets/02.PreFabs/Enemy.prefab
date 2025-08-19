@@ -180,9 +180,9 @@ MonoBehaviour:
   animator: {fileID: 0}
   controllers:
   - {fileID: 9100000, guid: 1bc91e5d290237f4b918c7de4473e5a6, type: 2}
-  - {fileID: 9100000, guid: ad4ec92c3337723468323f8fe666efa2, type: 2}
-  - {fileID: 9100000, guid: 2e9ff45b7c457ab42a1c508eafdeb33b, type: 2}
-  - {fileID: 9100000, guid: 9cb831fd971a63646ae723fb798f4aec, type: 2}
+  - {fileID: 22100000, guid: 52fa3dc6cd1aa8242a79d22ce08009a9, type: 2}
+  - {fileID: 22100000, guid: 8d8f9ad1f9f13c64895d49562f93e07a, type: 2}
+  - {fileID: 22100000, guid: a37e7f29c47a8db4db24f7b162514ec9, type: 2}
   data: {fileID: 0}
 --- !u!95 &-6466902985913008052
 Animator:
