@@ -50,7 +50,9 @@ public class Enemy : MonoBehaviour
 
     private void ApplyRound(int round)
     {
-        animator.runtimeAnimatorController = controllers[round - 1];
+        int index = (round - 1) % controllers.Length;
+
+        animator.runtimeAnimatorController = controllers[index];
     }
 
     public void Init(EnemyData enemyData, Vector2 spawnPos, Vector2 dir)
@@ -82,17 +84,32 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
-        // 이벤트
+        StartCoroutine(DieRoutine());
+    }
+
+    private IEnumerator DieRoutine()
+    {
         OnEnemyDied?.Invoke(coinReward);
 
         bc.enabled = false;
         rb.simulated = false;
+        rb.velocity = Vector2.zero;
 
-        animator.Play("Die");
-        
-        // 죽었을 때 처리 (오브젝트 비활성화)
+        // 0프레임부터 재생 보장
+        animator.Play("Die", 0, 0f);
+
+        // 상태 전환 반영을 위해 한 프레임 대기
+        yield return null;
+
+        // "Die"가 끝날 때까지 대기 (normalizedTime >= 1)
+        yield return new WaitUntil(() =>
+        {
+            var s = animator.GetCurrentAnimatorStateInfo(0);
+            return s.IsName("Die") && s.normalizedTime >= 1f;
+        });
+
         gameObject.SetActive(false);
     }
 

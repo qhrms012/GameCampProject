@@ -36,7 +36,6 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        AddCoin(100);
         if (isStart)
             StartCoroutine(RoundRoutine());
     }
@@ -108,7 +107,6 @@ public class GameManager : Singleton<GameManager>
     {
         coin += amount;
         OnCoinChanged?.Invoke(coin);
-        Debug.Log("현재 코인: " + coin);
     }
 
     public bool TrySpendCoin(int cost)
