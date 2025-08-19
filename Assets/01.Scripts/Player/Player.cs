@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -18,9 +19,14 @@ public class Player : MonoBehaviour
     // UI에서 사용하는 이벤트 (레벨만 유지)
     public static event System.Action<BulletType, int> OnBulletLevelChanged;
 
+    [SerializeField] Animator animator;
+    [SerializeField] AnimatorController controller;
+
     private void Awake()
     {
         curHp = maxHp;
+        controller = GetComponent<AnimatorController>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -103,6 +109,7 @@ public class Player : MonoBehaviour
             return;
         }
 
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.LevelUp);
         // 현재 타입 레벨 0으로 (UI 갱신용)
         state.level = 0;
         OnBulletLevelChanged?.Invoke(oldType, 0);
@@ -174,6 +181,26 @@ public class Player : MonoBehaviour
     private void Die()
     {
         isDie = true;
+        GameManager.Instance.Pause(true);
+        StartCoroutine(PlayerDie());
+        GameManager.Instance.GameOver();
+    }
+
+    IEnumerator PlayerDie()
+    {
+        // 0프레임부터 재생 보장
+        animator.Play("Die", 0, 0f);
+
+        // 상태 전환 반영을 위해 한 프레임 대기
+        yield return null;
+
+        // "Die"가 끝날 때까지 대기 (normalizedTime >= 1)
+        yield return new WaitUntil(() =>
+        {
+            var s = animator.GetCurrentAnimatorStateInfo(0);
+            return s.IsName("Die") && s.normalizedTime >= 1f;
+        });
+
         gameObject.SetActive(false);
     }
 }

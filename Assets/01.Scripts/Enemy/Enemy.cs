@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
 
     public EnemyData data;
 
+    private int spawnRound;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -39,24 +41,30 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        ApplyRound(GameManager.Instance.roundCount);        
-        GameManager.OnRoundChanged += ApplyRound;           
+        GameManager.OnRoundChanged += OnRoundChanged;
     }
 
     private void OnDisable()
     {
-        GameManager.OnRoundChanged -= ApplyRound;
+        GameManager.OnRoundChanged -= OnRoundChanged;
+    }
+
+    private void OnRoundChanged(int round)
+    {
+        if (round == spawnRound) ApplyRound(round); // 자기 라운드일 때만
     }
 
     private void ApplyRound(int round)
     {
         int index = (round - 1) % controllers.Length;
-
         animator.runtimeAnimatorController = controllers[index];
     }
 
-    public void Init(EnemyData enemyData, Vector2 spawnPos, Vector2 dir)
+    public void Init(EnemyData enemyData, Vector2 spawnPos, Vector2 dir,int round)
     {
+        spawnRound = round;
+        ApplyRound(round);
+
         rb.simulated = true;
         bc.enabled = true;
         
@@ -75,8 +83,8 @@ public class Enemy : MonoBehaviour
     }
     public void TakeDamage(float amount)
     {
-        curHp -= amount;           
-
+        curHp -= amount;
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Hit, 1);
         if (curHp <= 0)
         {
             Die();
@@ -120,7 +128,7 @@ public class Enemy : MonoBehaviour
             Player player = collision.GetComponent<Player>();
             player.TakeDamage(damage);
             rb.velocity = Vector2.zero;
-            Debug.Log($"{gameObject.name} → 플레이어 충돌, 이동 정지");
+
         }
 
         if(collision.CompareTag("Wall"))

@@ -143,11 +143,6 @@ public class UIManager : Singleton<UIManager>
         {
             GameManager.Instance.RollBullet();
         }
-        else
-        {
-            // 부족할 때 피드백
-            Debug.Log("코인이 부족합니다.");
-        }
     }
     void UpdateRoundCountUI(int round)
     {

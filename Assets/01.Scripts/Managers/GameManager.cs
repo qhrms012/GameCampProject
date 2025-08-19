@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 
@@ -28,6 +29,9 @@ public class GameManager : Singleton<GameManager>
     public BulletManager bulletManager;
     public List<RoundInfo> rounds;
 
+    [Header("PlayerDead")]
+    public GameObject deadPanel;
+
     public static event System.Action<int> OnCoinChanged;
     public static event System.Action<int> OnRoundChanged;
     public static event System.Action<float> OnRoundTimeChanged;
@@ -36,6 +40,8 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        AudioManager.Instance.PlayBgm(true);
+
         if (isStart)
             StartCoroutine(RoundRoutine());
     }
@@ -45,6 +51,8 @@ public class GameManager : Singleton<GameManager>
         while (isStart)
         {
             // 라운드 시작
+            AddCoin(20);
+            
             roundCount++;
             OnRoundChanged?.Invoke(roundCount);
             Debug.Log($"라운드 {roundCount} 시작!");
@@ -73,7 +81,7 @@ public class GameManager : Singleton<GameManager>
         Enemy enemy = monster.GetComponent<Enemy>();
 
         EnemyData enemyData = GetEnemyDataByRound();
-        enemy.Init(enemyData, enemySp.position, enemySp.up);
+        enemy.Init(enemyData, enemySp.position, enemySp.up,roundCount);
 
         yield return null;
     }
@@ -90,6 +98,7 @@ public class GameManager : Singleton<GameManager>
     public void RollBullet()
     {
         BulletData newBullet = bulletManager.GetRandomBullet();
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Select);
         player.UnlockBullet(newBullet);
     }
 
@@ -115,6 +124,33 @@ public class GameManager : Singleton<GameManager>
         coin -= cost;
         OnCoinChanged?.Invoke(coin);
         return true;
+    }
+
+    public void Pause(bool Pause)
+    {
+        if (Pause)
+        {
+            Time.timeScale = 0;
+            AudioManager.Instance.EffectBgm(Pause);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            AudioManager.Instance.EffectBgm(Pause);
+        }
+        
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("MainScene");
+        Time.timeScale = 1;
+    }
+    public void GameOver()
+    {
+        AudioManager.Instance.PlayBgm(false);
+        deadPanel.SetActive(true);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
     }
 }
 
