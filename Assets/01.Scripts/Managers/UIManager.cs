@@ -32,8 +32,8 @@ public class UIManager : Singleton<UIManager>
     public class BulletButtonPair
     {
         public BulletType type;
-        public Button promoteButton;              // ← root 제거
-        public TextMeshProUGUI levelText;         // 등급 텍스트도 없음
+        public Button promoteButton;              
+        public TextMeshProUGUI levelText;         
     }
 
     public List<BulletButtonPair> bulletButtons;
@@ -105,7 +105,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    // 전체 동기화 (가시성 변경 없음)
+    // 전체 동기화
     public void SyncButtonsFromPlayer()
     {
         var player = GameManager.Instance.player;
