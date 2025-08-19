@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -17,6 +18,10 @@ public class Enemy : MonoBehaviour
     private PlayerBullet pb;
     private SpriteRenderer spriteRenderer;
 
+    public Animator animator;
+    // 라운드별 컨트롤러 (Inspector에서 넣기)
+    public RuntimeAnimatorController[] controllers;
+
     // 이벤트 선언 (죽었을 때)
     public static event System.Action<int> OnEnemyDied;
 
@@ -26,11 +31,27 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
-        pb = GetComponent<PlayerBullet>();
-        curHp = maxHp;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
     }
+
+    private void OnEnable()
+    {
+        ApplyRound(GameManager.Instance.roundCount);        
+        GameManager.OnRoundChanged += ApplyRound;           
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnRoundChanged -= ApplyRound;
+    }
+
+    private void ApplyRound(int round)
+    {
+        animator.runtimeAnimatorController = controllers[round - 1];
+    }
+
     public void Init(EnemyData enemyData, Vector2 spawnPos, Vector2 dir)
     {
         data = enemyData;
@@ -41,7 +62,9 @@ public class Enemy : MonoBehaviour
         if (spriteRenderer != null && data.enemySprite != null)
             spriteRenderer.sprite = data.enemySprite;
 
+        animator.Play("Run");
         rb.velocity = dir * data.speed;
+        
     }
     public void TakeDamage(float amount)
     {
