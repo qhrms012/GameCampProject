@@ -14,9 +14,19 @@ public class UIManager : Singleton<UIManager>
     public TextMeshProUGUI roundTimerText;
     public Button coinBtn;
     public TextMeshProUGUI coinBtnText;
-    [SerializeField] private int basePrice = 20;
+
+    [SerializeField] 
+    private int basePrice = 20;
+
     private int price;
-    [SerializeField] private int increment = 2;
+
+    [SerializeField] 
+    private int increment = 2;
+
+    [SerializeField]
+    private Image playerHP;
+
+
 
     [System.Serializable]
     public class BulletButtonPair
@@ -62,6 +72,7 @@ public class UIManager : Singleton<UIManager>
     void OnEnable()
     {
         Player.OnBulletLevelChanged += UpdateLevelUI;
+        Player.onHpChanged += UpdateHPUI;
         GameManager.OnCoinChanged += UpdateCoinUI;
         GameManager.OnCoinChanged += UpdateCoinBtn;
         GameManager.OnRoundChanged += UpdateRoundCountUI;
@@ -73,6 +84,7 @@ public class UIManager : Singleton<UIManager>
     void OnDisable()
     {
         Player.OnBulletLevelChanged -= UpdateLevelUI;
+        Player.onHpChanged -= UpdateHPUI;
         GameManager.OnCoinChanged -= UpdateCoinUI;
         GameManager.OnCoinChanged -= UpdateCoinBtn;
         GameManager.OnRoundChanged -= UpdateRoundCountUI;
@@ -86,8 +98,10 @@ public class UIManager : Singleton<UIManager>
         foreach (var pair in bulletButtons)
         {
             int lv = player != null ? player.GetBulletLevel(pair.type) : 0;
-            if (pair.levelText) pair.levelText.text = player != null && player.HasBullet(pair.type) ? $"Lv.{lv}" : "Lv.-";
-            if (pair.promoteButton) pair.promoteButton.interactable = (lv >= 3);
+            if (pair.levelText) 
+                pair.levelText.text = player != null && player.HasBullet(pair.type) ? $"Lv.{lv}" : "Lv.-";
+            if (pair.promoteButton) 
+                pair.promoteButton.interactable = (lv >= 3);
         }
     }
 
@@ -155,6 +169,10 @@ public class UIManager : Singleton<UIManager>
         int m = Mathf.FloorToInt(t / 60f);
         int s = Mathf.FloorToInt(t % 60f);
         roundTimerText.text = $"{m:00}:{s:00}";
+    }
+    void UpdateHPUI(float Hp)
+    {
+        playerHP.fillAmount = Hp / GameManager.Instance.player.maxHp;
     }
 }
 

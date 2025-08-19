@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
 
     // UI에서 사용하는 이벤트 (레벨만 유지)
     public static event System.Action<BulletType, int> OnBulletLevelChanged;
+    public static event System.Action<float> onHpChanged;
 
     [SerializeField] Animator animator;
     [SerializeField] AnimatorController controller;
@@ -111,8 +112,8 @@ public class Player : MonoBehaviour
 
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.LevelUp);
         // 현재 타입 레벨 0으로 (UI 갱신용)
-        state.level = 0;
-        OnBulletLevelChanged?.Invoke(oldType, 0);
+        state.level -= 3;
+        OnBulletLevelChanged?.Invoke(oldType, state.level);
 
         // 이미 다음 등급이 해금되어 있다면 → 레벨 합치기(= Upgrade 1회)
         if (unlockedBullets.TryGetValue(next.type, out var target))
@@ -128,6 +129,7 @@ public class Player : MonoBehaviour
         // 다음 등급이 아직 없다면 → 기존 state를 승급시켜서 이동, Lv.1로 시작
         state.SetData(next); // 참조 교체 + 스탯 리셋
         state.level = 1;
+
         unlockedBullets.Remove(oldType);
         unlockedBullets[state.data.type] = state;
 
@@ -170,6 +172,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(float amount)
     {
         curHp -= amount;
+        onHpChanged?.Invoke(curHp);
         Debug.Log($"{gameObject.name} 피격! 남은 HP: {curHp}");
 
         if (curHp <= 0)
